@@ -1,0 +1,44 @@
+{
+  "name": "progwebtrabalho1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon --exec babel-node app.js",
+    "production": "pm2 startb app.js --name Eduardo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edualmeidahr/TrabalhoFinalPW"
+  },
+  "author": "Eduardo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/edualmeidahr/TrabalhoFinalPW/issues"
+  },
+  "homepage": "https://github.com/edualmeidahr/TrabalhoFinalPW#readme",
+  "dependencies": {
+    "@babel/preset-react": "^7.22.15",
+    "cores": "^0.8.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "express-form-data": "^2.0.22",
+    "moment": "^2.29.4",
+    "mysql": "^2.18.1",
+    "nodemon": "^3.0.1",
+    "pm2": "^5.3.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.23.2",
+    "@babel/node": "^7.22.19",
+    "@babel/plugin-transform-modules-commonjs": "^7.23.0",
+    "@babel/plugin-transform-react-jsx": "^7.22.15",
+    "@babel/preset-env": "^7.23.2",
+    "eslint": "^8.52.0",
+    "eslint-config-react-app": "^7.0.1",
+    "eslint-plugin-react-hooks": "^4.6.0"
+  }
+}

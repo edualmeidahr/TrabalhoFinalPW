@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Sua Página de Login</title>
+	<link rel="stylesheet" type="text/css" href="login.css">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<!-- Outros scripts e estilos Bootstrap aqui, se necessário -->
+</head>
+
+<body>
+
+	<div class="login-reg-panel">
+		<div class="login-info-box">
+			<h2>Have an account?</h2>
+			<p>Lorem ipsum dolor sit amet</p>
+			<label id="label-register" for="log-reg-show">Login</label>
+			<input type="radio" name="active-log-panel" id="log-reg-show" checked="checked">
+		</div>
+
+		<div class="register-info-box">
+			<h2>Don't have an account?</h2>
+			<p>Lorem ipsum dolor sit amet</p>
+			<label id="label-login" for="log-login-show">Register</label>
+			<input type="radio" name="active-log-panel" id="log-login-show">
+		</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+		<script>
+
+			function login() {
+				const nome = document.getElementById("nameid").value
+				const email = document.getElementById("emailid").value
+
+				fetch(`http://localhost:3002/clientes_email_all/${nome}/${email}`)
+					.then(response => response.json())
+					.then(data => {
+						console.log("Resposta da requisição:", data);
+
+						if (data.length > 0) {
+
+							window.location.href = "index.html"
+							console.log(data);
+						} else {
+							alert('Usuário não encontrado.');
+						}
+					})
+					.catch(error => console.error('Erro na requisição:', error));
+			}
+		</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+		<div class="white-panel">
+			<div class="login-show">
+				<h2>LOGIN</h2>
+				<input type="text" placeholder="First Name" id="nameid">
+				<input type="password" placeholder="Password" id="emailid">
+				<input type="button" onclick="login()" value="Login ">
+				<a href="">Forgot password?</a>
+			</div>
+			<div class="register-show">
+				<h2>REGISTER</h2>
+				<input type="text" placeholder="First Name">
+				<input type="password" placeholder="Password">
+				<input type="password" placeholder="Confirm Password">
+				<input type="button" value="Register">
+			</div>
+		</div>
+	</div>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="login.js"></script>
+</body>
+
+
+</html>

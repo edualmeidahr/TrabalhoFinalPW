@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset='utf-8'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+	<meta name='viewport' content='width=device-width, initial-scale=1'>
+	<title>Aula inicial FrontEnd</title>
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="formulario.css">
+
+
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+
+
+
+<body>
+
+	<script>
+		var url_string = window.location.href;
+		var url = new URL(url_string);
+		var id_cliente = url.searchParams.get("id_cliente");
+		var nome = url.searchParams.get("nome");
+		var sobrenome = url.searchParams.get("sobrenome");
+		var email = url.searchParams.get("email");
+		var salario = url.searchParams.get("salario");
+		var avatar = file
+
+		var deletarCliente = url.searchParams.get("delete");
+
+		function save() {
+			var data = {
+				nome: document.getElementById("fname").value,
+				sobrenome: document.getElementById("lsobrenome").value,
+				email: document.getElementById("lemail").value,
+				salario: document.getElementById("lsalario").value
+			}
+			if (id_cliente) {
+				console.log("data", { nome: "nome" })
+				axios.patch('http://localhost:3002/clientes/' + id_cliente,
+					data,
+					{
+						headers: {
+							'Content-Type': 'multipart/form-data'
+						}
+					})
+					.then(res => {
+						console.log(res)
+						alert("Cliente Atualizado com sucesso!")
+						window.location.href = "index.html"
+					})
+					.catch(error => {
+						console.log(error)
+					})
+				//window.location.href = "index.html"
+			} else {
+
+				const { data } = axios.post('http://localhost:3002/clientes', {
+					nome: document.getElementById("fname").value,
+					sobrenome: document.getElementById("lsobrenome").value,
+					email: document.getElementById("lemail").value,
+					salario: document.getElementById("lsalario").value,
+					//avatar: document.getElementById("avatar").value
+				}, {
+					headers: {
+						'Content-Type': 'multipart/form-data'
+					}
+				})
+					.then(res => {
+						console.log(res)
+						alert("Cliente Criado com sucesso!")
+						window.location.href = "index.html"
+					})
+					.catch(error => {
+						console.log(error)
+					})
+
+			}
+		}
+	</script>
+
+
+
+
+
+	<div class="wrapper fadeInDown">
+		<div id="formContent">
+			<!-- Tabs Titles -->
+
+			<!-- Icon -->
+			<div class="fadeIn first">
+				<img src="" id="icon" alt="Cliente" />
+			</div>
+			<form method="post" enctype="multipart/form-data">
+
+				<input type="text" id="fname" name="nome" value="" placeholder="Nome" class="fadeIn first">
+
+				<input type="text" id="lsobrenome" name="Sobrenome" value="" placeholder="Sobrenome"
+					class="fadeIn second">
+
+				<input type="email" id="lemail" name="email" value="" placeholder="E-mail" class="fadeIn third">
+
+				<input type="number" id="lsalario" name="salario" value="" placeholder="Salario" class="fadeIn fourth">
+
+				<br><br><label for="avatar">avatar:</label><br>
+				<input type="file" id="lavatar" name="avatar" value="" class="fadeIn fifth"><br><br>
+
+
+				<input type="password" id="lsenha" name="senha" value="" placeholder="Senha" class="fadeIn sixth">
+				<input type="button" onclick="save()" name="Enviar" value="Enviar">
+			</form>
+
+		</div>
+	</div>
+
+	<br>
+	<br>
+
+	<div id="lista">
+		<!-- LISTA DE CLIENTES -->
+
+	</div>
+
+
+	<script>
+		url_string = window.location.href;
+		url = new URL(url_string);
+		id_cliente = url.searchParams.get("id_cliente");
+		nome = url.searchParams.get("nome");
+		sobrenome = url.searchParams.get("sobrenome");
+		email = url.searchParams.get("email");
+		salario = url.searchParams.get("salario");
+		document.getElementById("fname").value = nome
+		document.getElementById("lsobrenome").value = sobrenome
+		document.getElementById("lemail").value = email
+		document.getElementById("lsalario").value = salario
+		var deletarCliente = url.searchParams.get("delete");
+		console.log("Delete", deletarCliente)
+
+		if (id_cliente) {
+			if (deletarCliente && deletarCliente === "ok") {
+				axios.delete("http://localhost:3002/clientes_del/" + id_cliente)
+					.then(res => {
+						alert("Cliente Apagado com sucesso!")
+						window.location.href = "index.html"
+					}
+					)
+			}
+
+		}
+
+
+		axios.get("http://localhost:3002/clientes_all")
+			.then(res => {
+				console.log("todos", res)
+				var lista_back = `<ol class="list-group list-group-numbered">`
+				for (var i = 0; i < res.data.length; i++) {
+					lista_back +=
+						`<li class="list-group-item d-flex justify-content-between align-items-start">` +
+						`<div class="ms-2 me-auto">` +
+						`<div class="fw-bold">${res.data[i].nome + " " + res.data[i].sobrenome}</div>` +
+						`Salário Cliente : R$ ${res.data[i].salario}` +
+						`</div>` +
+						`<span ><a href="perfil.html?id_cliente=${res.data[i].id_cliente}">Perfil</a></span>` +
+
+						`<span><a href="index.html?id_cliente=${res.data[i].id_cliente}&delete=ok">Delete</a></span>` +
+
+						`<span><a href="index.html?id_cliente=${res.data[i].id_cliente}` +
+						`&nome=${res.data[i].nome}&sobrenome=${res.data[i].sobrenome}` +
+						`&email=${res.data[i].email}&salario=${res.data[i].salario}` +
+						`&update=ok">Atualizar</a></span>` +
+						`</li>`
+				}
+				lista_back += `</ol>`
+				document.getElementById("lista").innerHTML = lista_back
+
+			})
+	</script>
+
+
+
+
+
+
+
+	<script>
+		var url_string = window.location.href;
+		var url = new URL(url_string);
+		var id_fornecedor = url.searchParams.get("id_fornecedor");
+		var razao = url.searchParams.get("razao");
+		var cpf_cnpj = url.searchParams.get("cpf_cnpj");
+		var contato = url.searchParams.get("contato");
+		var logradouro = url.searchParams.get("logradouro");
+		var cidade = url.searchParams.get("cidade");
+		var uf = url.searchParams.get("uf")
+
+		var deletarFornecedor = url.searchParams.get("delete");
+
+		function saveFornecedor() {
+			if (id_fornecedor) {
+				var data = {
+					razao: document.getElementById("id_razao").value,
+					cpf_cnpj: document.getElementById("id_cpf_cnpj").value,
+					contato: document.getElementById("id_contato").value,
+					logradouro: document.getElementById("id_logradouro").value,
+					cidade: document.getElementById("id_cidade").value,
+					uf: document.getElementById("id_uf").value
+				}
+
+				console.log("data", { razao: "razao" })
+				axios.patch('http://localhost:3002/fornecedores/' + id_fornecedor,
+					data,
+					{
+						headers: {
+							'Content-Type': 'multipart/form-data'
+						}
+					})
+					.then(res => {
+						console.log(res)
+						alert("Fornecedor Atualizado com sucesso!")
+						window.location.href = "index.html"
+					})
+					.catch(error => {
+						console.log(error)
+					})
+
+
+			} else {
+				//CODIGO INSERIR
+				var data = {
+					razao: document.getElementById("id_razao").value,
+					cpf_cnpj: document.getElementById("id_cpf_cnpj").value,
+					contato: document.getElementById("id_contato").value,
+					logradouro: document.getElementById("id_logradouro").value,
+					cidade: document.getElementById("id_cidade").value,
+					uf: document.getElementById("id_uf").value
+				}
+
+				console.log("data", { razao: "razao" })
+				axios.post('http://localhost:3002/fornecedores/',
+					data,
+					{
+						headers: {
+							'Content-Type': 'multipart/form-data'
+						}
+					})
+					.then(res => {
+						console.log(res)
+						console.log("criei o fornecedor")
+						alert("Fornecedor Criado com sucesso!")
+						window.location.href = "index.html"
+					})
+					.catch(error => {
+						console.log(error)
+					})
+			}
+
+		}
+	</script>
+	<br>
+	<br>
+	<br>
+	<br>
+
+
+
+
+
+	<div class="wrapper fadeInDown">
+		<div id="formContent">
+			<div class="fadeIn first">
+				<img src="" id="icon" alt="Fornecedor" class="fadeIn firdt" />
+			</div>
+			<form method="post" enctype="multipart/form-data">
+
+				<input type="text" id="id_razao" name="razao" value="" placeholder="razão" class="fadeIn second">
+
+				<input type="text" id="id_cpf_cnpj" name="cpf_cnpj" value="" placeholder="cpf_cnpj"
+					class="fadeIn third">
+
+				<input type="text" id="id_contato" name="contato" value="" placeholder="contato" class="fadeIn fourth">
+
+				<input type="text" id="id_logradouro" name="logradouro" value="" placeholder="logradouro"
+					class="fadeIn fifth">
+
+				<input type="text" id="id_cidade" name="cidade" value="" placeholder="cidade" class="fadeIn sixth">
+
+				<input type="text" id="id_uf" name="uf" value="" placeholder="UF" class="fadeIn seventh">
+				<br><br><label for="avatar">avatar:</label>
+				<input type="file" id="id_avatar" name="avatar" value="" placeholder="UF" class="fadeIn eighth"><br>
+				<input type="password" id="id_senha" name="senha" value="" placeholder="Senha" class="fadeIn ninth">
+
+
+
+				<input type="button" onclick="saveFornecedor()" name="Enviar" value="Enviar">
+			</form>
+		</div>
+	</div>
+	<br>
+	<br>
+
+
+	<div id="lista2">
+		<!-- LISTA DE Fornecedores -->
+
+	</div>
+
+	<script>
+		url_string = window.location.href;
+		url = new URL(url_string);
+		id_fornecedor = url.searchParams.get("id_fornecedor");
+
+		razao = url.searchParams.get("razao");
+		cpf_cnpj = url.searchParams.get("cpf_cnpj");
+		contato = url.searchParams.get("contato");
+		logradouro = url.searchParams.get("logradouro");
+		cidade = url.searchParams.get("cidade");
+		uf = url.searchParams.get("uf");
+
+		document.getElementById("id_razao").value = razao
+		document.getElementById("id_cpf_cnpj").value = cpf_cnpj
+		document.getElementById("id_contato").value = contato
+		document.getElementById("id_logradouro").value = logradouro
+		document.getElementById("id_cidade").value = cidade
+		document.getElementById("id_uf").value = uf
+
+		var deletarFornecedor = url.searchParams.get("delete");
+
+		console.log("Delete", deletarFornecedor)
+		if (id_fornecedor) {
+			if (deletarFornecedor && deletarFornecedor === "ok") {
+				axios.delete("http://localhost:3002/fornecedores_del/" + id_fornecedor)
+					.then(res => {
+						alert("Fornecedor Apagado com sucesso!")
+						window.location.href = "index.html"
+					}
+					)
+			}
+		}
+
+		axios.get("http://localhost:3002/fornecedores_all")
+			.then(res => {
+				console.log("todos", res)
+				var lista_back = `<ol class="list-group list-group-numbered">`
+				for (var i = 0; i < res.data.length; i++) {
+					lista_back +=
+						`<li class="list-group-item d-flex justify-content-between align-items-start">` +
+						`<div class="ms-2 me-auto">` +
+						`<div class="fw-bold">${res.data[i].razao}</div>` +
+						`CPF_CNPJ : ${res.data[i].cpf_cnpj}` +
+						`</div>` +
+						`<span ><a href="perfil.html?id_fornecedor=${res.data[i].id_fornecedor}">Perfil</a></span>` +
+
+						`<span><a href="index.html?id_fornecedor=${res.data[i].id_fornecedor}&delete=ok">Delete</a></span>` +
+
+						`<span><a href="index.html?id_fornecedor=${res.data[i].id_fornecedor}` +
+						`&razao=${res.data[i].razao}&cpf_cnpj=${res.data[i].cpf_cnpj}` +
+						`&contato=${res.data[i].contato}&logradouro=${res.data[i].logradouro}` +
+						`&cidade=${res.data[i].cidade}&uf=${res.data[i].uf}` +
+						`&update=ok">Atualizar</a></span>` +
+						`</li>`
+				}
+				lista_back += `</ol>`
+				document.getElementById("lista2").innerHTML = lista_back
+
+			})
+	</script>
+
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+		crossorigin="anonymous"></script>
+</body>
+
+
+</html>
